@@ -1,0 +1,28 @@
+program Biblioteca;
+
+uses crt;
+var i : byte;
+
+procedure Menu;
+
+begin
+
+	textcolor(lightcyan);
+	writeln('[]= = = = = = = = = = = = = = = = = =[]');
+	writeln('|                                     |');
+	writeln('|                                     |');
+	writeln('|                                     |');
+	writeln('|             BIBLIOTECA              |');
+	writeln('|                                     |');
+	writeln('|  UNIVERSIDAD ALMA MATER DEL CARIBE  |');
+	writeln('|                                     |');
+	writeln('|                                     |');
+	writeln('|                                     |');
+	writeln('[]= = = = = = = = = = = = = = = = = =[]');
+
+end;
+
+BEGIN
+	Menu;
+	
+END.
