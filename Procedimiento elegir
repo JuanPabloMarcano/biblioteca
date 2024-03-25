@@ -1,0 +1,84 @@
+var
+  opcion: integer;
+ 
+  writeln;
+	writeln('Presione "ENTER", para continuar');
+	readln;
+	clrscr;
+	writeln('[]= = = = = = = = = = = = = = = = = =[]');
+	writeln('|                                     |');
+	writeln('|1)REGISTRAR NUEVO ALUMNO             |');
+	writeln('|                                     |');
+	writeln('|2)REGISTRAR PRESTAMOS                |');
+	writeln('|                                     |');
+	writeln('|3)PRESTAMOS ACTIVOS                  |');
+	writeln('|                                     |');
+	writeln('|4)LIBROS DISPONIBLES                 |');
+	writeln('|                                     |');
+	writeln('|5)ALUMNOS SANCIONASDOS               |');
+	writeln('|                                     |');
+	writeln('|6)RENOVACION                         |');
+	writeln('|                                     |');
+	writeln('|7)DEVOLUCION                         |');
+	writeln('|                                     |');
+	writeln('|8)INGRESAR NUEVO LIBRO               |');
+	writeln('|                                     |');
+	writeln('[]= = = = = = = = = = = = = = = = = =[]');
+
+end;
+
+procedure Elegir;
+
+begin
+
+  writeln('Ingrese la opcion que desee: ');
+  readln(opcion);
+  case opcion of
+  1:
+  begin
+    writeln('Ingrese los datos del alumno: ');
+  end;
+  2:
+  begin
+    writeln('Registre el prestamo');
+  end;
+  3:
+  begin
+    writeln('Los Prestamos activos son: ');
+  end;
+  4:
+  begin
+    writeln('Los libros disponibles son: ');
+  end;
+  5:
+  begin
+    writeln('Los alumnos sancionados son: ');
+  end;
+  6:
+  begin
+    writeln('Ingrese el libro que desea renovar: ');
+  end;
+  7:
+  begin
+    writeln('Ingrese el libro que desee devolver: ');
+  end;
+  8:
+  begin
+    writeln('Ingrese el nuevo libro: ');
+  end;
+ end;
+ if (opcion >8) or (opcion < 1)then
+   begin
+     textcolor(lightred);
+     writeln('Ingrese un numero valido');
+   end;
+
+
+end;
+
+BEGIN
+	Menu;
+	Elegir;
+	
+  readln;
+END.
