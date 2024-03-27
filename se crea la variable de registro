@@ -1,0 +1,38 @@
+uses sysutils;
+
+type
+  tEstudiantes= record
+    nombre: string[30];
+    apellido: string[30];
+    Edad: byte;
+    Cedula: integer;
+    Carrera: String[30];
+  end;
+    
+
+var
+  Personas: tEstudiantes;
+  txt: Text;
+
+assign(txt,'Personas.txt');
+    rewrite(txt);
+    
+    writeln('----------------------------------');
+    writeln('Ingrese los datos del alumno: ');
+    writeln('----------------------------------');
+    writeln('Ingrese el nombre: ');
+    readln(Personas.nombre);
+    writeln('----------------------------------');
+    writeln('Ingrese el apellido: ');
+    readln(Personas.apellido);
+    writeln('----------------------------------');
+    writeln('Ingrese La edad: ');
+    readln(Personas.Edad);
+    writeln('----------------------------------');
+    writeln('Ingrese la Cedula: ');
+    readln(Personas.Cedula); 
+    writeln('----------------------------------');
+    writeln('Ingrese la carrera del estudiante: ');
+    readln(Personas.Carrera);
+    writeln('----------------------------------');
+    close(txt);
