@@ -1,0 +1,34 @@
+type
+  tPrestamo = record
+  Titulo: string[30];
+  autor: string[30];
+  FechaSalida: string[30];
+  NumeroPaginas: string[30];
+  Existencias: integer;
+  end;
+
+var
+  Prestamo: tPrestamo;
+
+{Esta Parte esta dentro del case}
+assign(txt,'Prestamo.txt');
+    rewrite(txt);
+    writeln('----------------------------------------------------');
+    writeln('Registre el prestamo: ');
+    writeln('----------------------------------------------------');
+    writeln('Ingrese El Titulo del Libro que desea: ');
+    readln(Prestamo.Titulo);
+    writeln('----------------------------------------------------');
+    writeln('Ingrese El Autor del Libro que desea: ');
+    readln(Prestamo.Autor);
+    writeln('----------------------------------------------------');
+    writeln('Ingrese la Fecha de salida del Libro que desea: ');
+    readln(Prestamo.FechaSalida);
+    writeln('----------------------------------------------------');
+    writeln('Ingrese El Numero de paginas del Libro que desea: ');
+    readln(Prestamo.NumeroPaginas);
+    writeln('----------------------------------------------------');
+    writeln('Ingrese las existencias del Libro que desea: ');
+    readln(Prestamo.Existencias);
+    writeln('----------------------------------------------------');
+    close(txt);
