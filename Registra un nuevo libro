@@ -1,0 +1,31 @@
+type
+  tRegistrarLibro = record
+  Titulo: string[30];
+  autor: string[30];
+  FechaSalida: string[30];
+  NumeroPaginas: string[30];
+  end;
+
+var
+  Libro: tRegistrarLibro;
+
+{dentro del case}
+
+assign(txt,'NuevoLibro.txt');
+    rewrite(txt);
+      writeln('--------------------------');
+      writeln('Ingrese el nuevo libro: ');
+      writeln('--------------------------');
+      writeln('Ingrese el Titulo: ');
+      readln(Libro.Titulo);
+      writeln('--------------------------');
+      writeln('Ingrese el Autor: ');
+      readln(Libro.Autor);
+      writeln('--------------------------');
+      writeln('Ingrese La Fecha de Salida: ');
+      readln(Libro.FechaSalida);
+      writeln('--------------------------');
+      writeln('Ingrese el Numero de paginas: ');
+      readln(Libro.NumeroPaginas);
+      writeln('--------------------------');
+    close(txt);
