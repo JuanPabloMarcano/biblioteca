@@ -1,0 +1,37 @@
+//   PROCEDURE INGRESAR NUEVO LIBRO   //
+
+procedure IngresarNuevoLibro;
+var
+  respuesta: String;
+  txt: Text;
+begin
+  writeln('Es usted el encargado? (Si/No)');
+  readln(respuesta);
+  
+  if LowerCase(respuesta) <> 'si' then
+  begin
+    writeln('Solo el encargado puede crear nuevos libros');
+    Exit;
+  end;
+
+  CrearArchivoSiNoExiste('NuevoLibro.txt');
+  assign(txt, 'NuevoLibro.txt');
+  append(txt);
+  
+  writeln('Ingrese el Titulo del Libro: ');
+  readln(Libro.Titulo);
+  writeln('Ingrese el Autor del Libro: ');
+  readln(Libro.autor);
+
+  writeln('Ingrese el Numero de paginas del Libro: ');
+  readln(Libro.NumeroPaginas);
+  writeln('Ingrese las existencias del Libro: ');
+  readln(Libro.Existencias);
+  
+  writeln(txt, Libro.Titulo);
+  writeln(txt, Libro.autor);
+  writeln(txt, Libro.NumeroPaginas);
+  writeln(txt, Libro.Existencias);
+  
+  close(txt);
+  writeln('Libro registrado con éxito.');
