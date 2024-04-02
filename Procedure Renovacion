@@ -1,0 +1,49 @@
+//   PROCEDURE RENOVACION //
+
+procedure Renovacion;
+var
+  encontrado: Boolean;
+  cedula: integer;
+  tempPrestamo: tPrestamo;
+  tempEstudiante: tEstudiantes;
+  tempFileName: string;
+begin
+
+
+  CrearArchivoSiNoExiste('Prestamo.txt');
+  
+  encontrado := False;
+  
+  assign(txt, 'Prestamo.txt');
+  reset(txt);
+  
+  writeln('Ingrese la Cedula del alumno: ');
+  readln(cedula);  
+  
+  while not eof(txt) do
+  begin
+    readln(txt, Prestamo.Cedula);
+    readln(txt, Prestamo.Titulo);
+    readln(txt, Prestamo.autor);
+
+    readln(txt, Prestamo.NumeroPaginas);
+    readln(txt, Prestamo.FechaDevolucion);
+    
+    if Prestamo.Cedula = cedula then
+    begin
+      encontrado := True;
+      break;
+    end;
+  end;
+  
+  close(txt);
+  
+  if encontrado then
+  begin
+    writeln('se ha reiniciado tu contador de préstamos!');
+  end
+  else
+  begin
+    writeln('El alumno no tiene préstamos activos.');
+  end;
+end;
