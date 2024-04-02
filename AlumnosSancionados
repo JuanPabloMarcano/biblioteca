@@ -1,0 +1,37 @@
+// PROCEDURE ALUMNOS SANCIONADOS //
+
+procedure AlumnosSancionados;
+var
+  txt: Text;
+  sancionadoStr: String;
+begin
+  CrearArchivoSiNoExiste('Personas.txt');
+  
+  assign(txt, 'Personas.txt');
+  reset(txt);
+  
+  writeln('Alumnos sancionados:');
+  while not eof(txt) do
+  begin
+    readln(txt, Estudiante.nombre);
+    readln(txt, Estudiante.apellido);
+    readln(txt, Estudiante.Edad);
+    readln(txt, Estudiante.Cedula);
+    readln(txt, Estudiante.Carrera);
+    readln(txt, sancionadoStr);
+    
+    // Verificar si el estudiante está sancionado
+    if sancionadoStr = 'TRUE' then
+    begin
+      writeln('Nombre: ', Estudiante.nombre, ' ', Estudiante.apellido);
+      writeln('Cedula: ', Estudiante.Cedula);
+      writeln('Carrera: ', Estudiante.Carrera);
+      writeln('Sancionado: ', sancionadoStr);
+      writeln('-----------------------------');
+    end;
+  end;
+  
+  close(txt);
+end;
+
+
