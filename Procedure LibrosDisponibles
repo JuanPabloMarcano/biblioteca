@@ -1,0 +1,29 @@
+// PROCEDURE LIBROS DISPONIBLES //
+
+procedure LibrosDisponibles;
+begin
+
+
+  CrearArchivoSiNoExiste('NuevoLibro.txt');
+  assign(txt, 'NuevoLibro.txt');
+  reset(txt);
+  
+  writeln('Libros disponibles:');
+  while not eof(txt) do
+  begin
+    readln(txt, Libro.Titulo);
+    readln(txt, Libro.autor);
+
+    readln(txt, Libro.NumeroPaginas);
+    readln(txt, Libro.Existencias);
+    
+    writeln('Titulo: ', Libro.Titulo);
+    writeln('Autor: ', Libro.autor);
+
+    writeln('Numero de paginas: ', Libro.NumeroPaginas);
+    writeln('Existencias: ', Libro.Existencias);
+    writeln('-----------------------------');
+  end;
+  
+  close(txt);
+end;
