@@ -1,0 +1,494 @@
+Programa Biblioteca;
+
+Usar
+  crt, sysutils, DateUtils;
+
+Tipo
+  TEstudiantes = registro
+    nombre: cadena[30];
+    apellido: cadena[30];
+    edad: entero;
+    cedula: entero;
+    carrera: cadena[30];
+    sancionado: booleano;
+  fin registro;
+
+Tipo
+  TPrestamo = registro
+    cedula: entero;
+    titulo: cadena[30];
+    autor: cadena[30];
+    numeroPaginas: cadena[30];
+    fechaDevolucion: cadena[30];
+  fin registro;
+
+Tipo
+  TPersona = registro
+    nombre: cadena[30];
+    apellido: cadena[30];
+    edad: entero;
+    cedula: entero;
+    carrera: cadena[30];
+    sancionado: booleano;
+  fin registro;
+
+Var
+  opcion: entero;
+  estudiante: TEstudiantes;
+  prestamo: TPrestamo;
+  libro: TLibro;
+  txt, tempFile: Text;
+  sancionadoStr: cadena;
+  currentDir: cadena;
+
+Procedimiento CrearArchivoSiNoExiste(nombreArchivo: cadena);
+Var
+  archivo: Text;
+Principio
+  Si no ExisteArchivo(nombreArchivo) entonces
+    CrearArchivo(nombreArchivo);
+  Fin Si;
+Fin Procedimiento;
+
+Procedimiento RegistrarNuevoAlumno;
+Var
+  inputStr: AnsiString;
+  cedulaExistente: booleano;
+  tempEstudiante: TEstudiantes;
+Principio
+  CrearArchivoSiNoExiste('Personas.txt');
+
+  asignar(txt, 'Personas.txt');
+  resetear(txt);
+  si IOresultado <> 0 entonces
+    Escribir('Error al abrir el archivo.');
+    Salir;
+  Fin Si;
+
+  cedulaExistente := Falso;
+
+  Escribir('Ingrese la Cedula: ');
+  leerln(inputStr);
+  mientras no TryStrToInt(inputStr, estudiante.cedula) hacer
+    Escribir('Cedula invalida. Ingrese un numero valido: ');
+    leerln(inputStr);
+  Fin Mientras;
+
+  mientras no eof(txt) hacer
+    leerln(txt, tempEstudiante.nombre);
+    leerln(txt, tempEstudiante.apellido);
+    leerln(txt, tempEstudiante.edad);
+    leerln(txt, tempEstudiante.cedula);
+    leerln(txt, tempEstudiante.carrera);
+    leerln(txt, sancionadoStr);
+    tempEstudiante.sancionado := sancionadoStr = 'True';
+
+    si estudiante.cedula = tempEstudiante.cedula entonces
+      cedulaExistente := Verdadero;
+      salir;
+    Fin Si;
+  Fin Mientras;
+
+  cerrar(txt);
+
+  si cedulaExistente entonces
+    Escribir('La cedula ingresada ya esta registrada.');
+    Salir;
+  Fin Si;
+
+  asignar(txt, 'Personas.txt');
+  adjuntar(txt);
+
+   Escribir('----------------------------------');
+   Escribir('Ingrese los datos del alumno: ');
+   Escribir('----------------------------------');
+   Escribir('Ingrese el nombre: ');
+  leerln(estudiante.nombre);
+  Escribir('----------------------------------');
+  Escribir('Ingrese el apellido: ');
+  leerln(estudiante.apellido);
+  Escribir('----------------------------------');
+    Escribir('Ingrese La edad: ');
+  leerln(inputStr);
+  mientras no TryStrToInt(inputStr, estudiante.edad) hacer
+    Escribir('Edad invalida. Ingrese un número válido: ');
+    leerln(inputStr);
+  Fin Mientras;
+  Escribir('----------------------------------');
+  Escribir('Ingrese la carrera del estudiante: ');
+  leerln(estudiante.carrera);
+  estudiante.sancionado := Falso;
+
+  escribirln(txt, estudiante.nombre);
+  escribirln(txt, estudiante.apellido);
+  escribirln(txt, estudiante.edad);
+  escribirln(txt, estudiante.cedula);
+  escribirln(txt, estudiante.carrera);
+  escribirln(txt, estudiante.sancionado);
+
+  cerrar(txt);
+  Escribir('Se han registrado los datos del alumno con exito.');
+Fin Procedimiento;
+
+//   PROCEDURE REGISTRAR PRESTAMO   //
+
+Procedimiento RegistrarPrestamo;
+Var
+  encontrado, libroDisponible, tienePrestamoActivo, libroYaPrestado: booleano;
+  cedulaPrestamo, diasPrestamo: entero;
+  txt, tempFile: Text;
+  sancionadoStr: cadena;
+Principio
+  CrearArchivoSiNoExiste('Personas.txt');
+  CrearArchivoSiNoExiste('Prestamo.txt');
+  CrearArchivoSiNoExiste('NuevoLibro.txt');
+
+  encontrado := Falso;
+  libroDisponible := Falso;
+  tienePrestamoActivo := Falso;
+  libroYaPrestado := Falso;
+
+  // Verificar y abrir el archivo Personas.txt
+  asignar(txt, 'Personas.txt');
+  resetear(txt);
+  si IOresultado <> 0 entonces
+    Escribir('Error al abrir el archivo Personas.txt.');
+    Salir;
+  Fin Si;
+
+  Escribir('Ingrese su cedula para realizar el prestamo: ');
+  leerln(cedulaPrestamo);
+
+  mientras no eof(txt) hacer
+    leerln(txt, Persona.nombre);
+    leerln(txt, Persona.apellido);
+    leerln(txt, Persona.edad);
+    leerln(txt, Persona.cedula);
+    leerln(txt, Persona.carrera);
+    leerln(txt, sancionadoStr);
+    Persona.sancionado := sancionadoStr = 'True';
+
+    si Persona.cedula = cedulaPrestamo entonces
+      encontrado := Verdadero;
+      si Persona.sancionado entonces
+        Escribir('El estudiante esta sancionado.');
+        Escribir('No puede pedir un prestamo.');
+        cerrar(txt);
+        Salir;
+      Fin Si;
+      salir;
+    Fin Si;
+  Fin Mientras;
+
+  cerrar(txt);
+
+  si no encontrado entonces
+    Escribir('El alumno no esta registrado.');
+    Salir;
+  Fin Si;
+
+  // Verificar y abrir el archivo NuevoLibro.txt
+  asignar(txt, 'NuevoLibro.txt');
+  resetear(txt);
+  si IOresultado <> 0 entonces
+    Escribir('Error al abrir el archivo NuevoLibro.txt.');
+    Salir;
+  Fin Si;
+
+  Escribir('Ingrese el titulo del libro que desea pedir:');
+  leerln(libro.titulo);
+
+  mientras no eof(txt) hacer
+    leerln(txt, Libro.titulo);
+    leerln(txt, Libro.autor);
+    leerln(txt, Libro.numeroPaginas);
+    leerln(txt, Libro.existencias);
+
+    si libro.titulo = libro.titulo entonces
+      libroDisponible := libro.existencias > 0;
+      salir;
+    Fin Si;
+  Fin Mientras;
+
+  cerrar(txt);
+
+  si no libroDisponible entonces
+    Escribir('El libro no esta disponible.');
+    Salir;
+  Fin Si;
+
+  // Actualizar las existencias del libro
+  asignar(txt, 'NuevoLibro.txt');
+  resetear(txt);
+  asignar(tempFile, 'temp.txt');
+  reescribir(tempFile);
+
+  mientras no eof(txt) hacer
+    leerln(txt, Libro.titulo);
+    leerln(txt, Libro.autor);
+    leerln(txt, Libro.numeroPaginas);
+    leerln(txt, Libro.existencias);
+
+    si libro.titulo = libro.titulo entonces
+      Dec(Libro.existencias);
+    Fin Si;
+
+    escribirln(tempFile, Libro.titulo);
+    escribirln(tempFile, Libro.autor);
+    escribirln(tempFile, Libro.numeroPaginas);
+    escribirln(tempFile, Libro.existencias);
+  Fin Mientras;
+
+  cerrar(txt);
+  cerrar(tempFile);
+  borrar(txt);
+  renombrar(tempFile, 'NuevoLibro.txt');
+
+  // Registrar préstamo en Prestamo.txt
+  asignar(txt, 'Prestamo.txt');
+  adjuntar(txt);
+  escribirln(txt, Persona.cedula);
+  escribirln(txt, Libro.titulo);
+  escribirln(txt, DateToStr(Date)); // Fecha actual como fecha de préstamo
+  escribirln(txt, ''); // Fecha de devolución inicialmente vacía
+
+  cerrar(txt);
+
+  Escribir('Prestamo registrado con exito.');
+Fin Procedimiento;
+
+//   PROCEDURE PRESTAMOS ACTIVOS   //
+
+Procedimiento PrestamosActivos;
+Var
+  txt: Text;
+  cedulaStr, numeroPaginasStr: cadena;
+  tempNumeroPaginas: entero;
+Principio
+  CrearArchivoSiNoExiste('Prestamo.txt');
+
+  asignar(txt, 'Prestamo.txt');
+  resetear(txt);
+
+  Escribir('Prestamos activos:');
+  mientras no eof(txt) hacer
+    leerln(txt, Prestamo.cedula);
+    leerln(txt, Prestamo.titulo);
+    leerln(txt, Libro.autor);
+
+    // Leer NumeroPaginas y FechaDevolucion como cadenas
+    leerln(txt, numeroPaginasStr);
+    leerln(txt, Prestamo.fechaDevolucion);
+
+    // Convertir cadena a entero usando Val
+    Val(numeroPaginasStr, tempNumeroPaginas);
+    Str(tempNumeroPaginas, Prestamo.numeroPaginas);
+
+    Escribir('Cedula: ', Prestamo.cedula);
+    Escribir('Titulo: ', Prestamo.titulo);
+    Escribir('Autor: ', Libro.autor);
+
+    Escribir('Numero de paginas: ', Prestamo.numeroPaginas);
+
+    Escribir('-----------------------------');
+  Fin Mientras;
+
+  cerrar(txt);
+Fin Procedimiento;
+
+// PROCEDURE LIBROS DISPONIBLES //
+
+Procedimiento LibrosDisponibles;
+Principio
+  CrearArchivoSiNoExiste('NuevoLibro.txt');
+  asignar(txt, 'NuevoLibro.txt');
+  resetear(txt);
+
+  Escribir('Libros disponibles:');
+  mientras no eof(txt) hacer
+    leerln(txt, Libro.titulo);
+    leerln(txt, Libro.autor);
+
+    leerln(txt, Libro.numeroPaginas);
+    leerln(txt, Libro.existencias);
+
+    Escribir('Titulo: ', Libro.titulo);
+    Escribir('Autor: ', Libro.autor);
+
+    Escribir('Numero de paginas: ', Libro.numeroPaginas);
+    Escribir('Existencias: ', Libro.existencias);
+    Escribir('-----------------------------');
+  Fin Mientras;
+
+  cerrar(txt);
+Fin Procedimiento;
+
+// PROCEDURE ALUMNOS SANCIONADOS //
+
+Procedimiento AlumnosSancionados;
+Var
+  txt: Text;
+  sancionadoStr: cadena;
+Principio
+  CrearArchivoSiNoExiste('Personas.txt');
+
+  asignar(txt, 'Personas.txt');
+  resetear(txt);
+
+  Escribir('Alumnos sancionados:');
+  mientras no eof(txt) hacer
+    leerln(txt, Estudiante.nombre);
+    leerln(txt, Estudiante.apellido);
+    leerln(txt, Estudiante.edad);
+    leerln(txt, Estudiante.cedula);
+    leerln(txt, Estudiante.carrera);
+    leerln(txt, sancionadoStr);
+
+    // Verificar si el estudiante está sancionado
+    si sancionadoStr = 'TRUE' entonces
+      Escribir('Nombre: ', Estudiante.nombre, ' ', Estudiante.apellido);
+      Escribir('Cedula: ', Estudiante.cedula);
+      Escribir('Carrera: ', Estudiante.carrera);
+      Escribir('Sancionado: ', sancionadoStr);
+      Escribir('-----------------------------');
+    Fin Si;
+  Fin Mientras;
+
+  cerrar(txt);
+Fin Procedimiento;
+
+//   PROCEDURE RENOVACION //
+
+Procedimiento Renovacion;
+Var
+  encontrado: booleano;
+  cedula: entero;
+  tempPrestamo: TPrestamo;
+  tempEstudiante: TEstudiantes;
+  tempFileName: cadena;
+Principio
+  CrearArchivoSiNoExiste('Prestamo.txt');
+
+  encontrado := Falso;
+
+  asignar(txt, 'Prestamo.txt');
+  resetear(txt);
+
+  Escribir('Ingrese la Cedula del alumno: ');
+  leerln(cedula);
+
+  mientras no eof(txt) hacer
+    leerln(txt, Prestamo.cedula);
+    leerln(txt, Prestamo.titulo);
+    leerln(txt, Prestamo.autor);
+
+    leerln(txt, Prestamo.numeroPaginas);
+    leerln(txt, Prestamo.fechaDevolucion);
+
+    si Prestamo.cedula = cedula entonces
+      encontrado := Verdadero;
+      salir;
+    Fin Si;
+  Fin Mientras;
+
+  cerrar(txt);
+
+  si encontrado entonces
+    Escribir('se ha reiniciado tu contador de prestamos!');
+  else
+    Escribir('El alumno no tiene prestamos activos.');
+  Fin Si;
+Fin Procedimiento;
+
+//   PROCEDURE DEVOLUCION   //
+
+Procedimiento Devolucion;
+Var
+  encontrado, teniaSancionAntes: booleano;
+  cedula: entero;
+  tempPrestamo: TPrestamo;
+  tempEstudiante: TEstudiantes;
+  tempFileName: cadena;
+  sancionadoStr: cadena;  // Variable para almacenar el estado de sanción como cadena
+Principio
+  CrearArchivoSiNoExiste('Prestamo.txt');
+
+  encontrado := Falso;
+  teniaSancionAntes := Falso;  // Variable para verificar si el estudiante tenía una sanción antes de devolver el libro
+
+  Escribir('Ingrese la Cedula del alumno: ');
+  leerln(cedula);
+
+  // Eliminar préstamos asociados con la cédula ingresada
+  asignar(txt, 'Prestamo.txt');
+  resetear(txt);
+  asignar(tempFile, 'temp.txt');
+  reescribir(tempFile);
+
+  mientras no eof(txt) hacer
+    leerln(txt, Prestamo.cedula);
+    leerln(txt, Prestamo.titulo);
+    leerln(txt, Prestamo.autor);
+
+    leerln(txt, Prestamo.numeroPaginas);
+    leerln(txt, Prestamo.fechaDevolucion);
+
+    si Prestamo.cedula <> cedula entonces
+      // Si la cédula no coincide, mantener el préstamo en el archivo
+      escribirln(tempFile, Prestamo.cedula);
+      escribirln(tempFile, Prestamo.titulo);
+      escribirln(tempFile, Prestamo.autor);
+      escribirln(tempFile, Prestamo.numeroPaginas);
+      escribirln(tempFile, Prestamo.fechaDevolucion);
+    sino
+      // Si la cédula coincide, marcar como encontrado
+      encontrado := Verdadero;
+    Fin Si;
+  Fin Mientras;
+
+  cerrar(txt);
+  cerrar(tempFile);
+
+  borrar(txt);
+  renombrar(tempFile, 'Prestamo.txt');
+
+  si encontrado entonces
+    Escribir('Devolucion registrada con exito.');
+  else
+    Escribir('El alumno no tiene prestamos activos.');
+  Fin Si;
+Fin Procedimiento;
+
+//   PROGRAMA PRINCIPAL   //
+
+Principio
+  repetir
+    Escribir('----------------------------------');
+    Escribir('SISTEMA DE BIBLIOTECA UNIVERSITARIA');
+    Escribir('----------------------------------');
+    Escribir('1. Registrar Nuevo Alumno');
+    Escribir('2. Registrar Prestamo');
+    Escribir('3. Prestamos Activos');
+    Escribir('4. Libros Disponibles');
+    Escribir('5. Alumnos Sancionados');
+    Escribir('6. Renovacion de prestamo');
+    Escribir('7. Devolucion');
+    Escribir('8. Salir');
+    Escribir('----------------------------------');
+    Escribir('Seleccione una opcion: ');
+    leerln(opcion);
+
+    caso opcion de
+      1: RegistrarNuevoAlumno;
+      2: RegistrarPrestamo;
+      3: PrestamosActivos;
+      4: LibrosDisponibles;
+      5: AlumnosSancionados;
+      6: Renovacion;
+      7: Devolucion;
+      8: Escribir('Saliendo del programa...');
+      sino
+        Escribir('Opcion invalida. Intente de nuevo.');
+    Fin Caso;
+  hasta opcion = 8;
+Fin.
