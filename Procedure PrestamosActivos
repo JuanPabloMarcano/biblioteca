@@ -1,0 +1,43 @@
+//   PROCEDURE PRESTAMOS ACTIVOS   //
+
+procedure PrestamosActivos;
+var
+  txt: Text;
+  cedulaStr, numeroPaginasStr: string;
+  tempNumeroPaginas: LongInt;
+begin
+
+  
+  CrearArchivoSiNoExiste('Prestamo.txt');
+  
+
+  assign(txt, 'Prestamo.txt');
+  reset(txt);
+  
+  writeln('Préstamos activos:');
+  while not eof(txt) do
+  begin
+    readln(txt, Prestamo.Cedula);
+    readln(txt, Prestamo.Titulo);
+    readln(txt, Libro.autor);
+
+    
+    // Leer NumeroPaginas y FechaDevolucion como strings
+    readln(txt, numeroPaginasStr);
+    readln(txt, Prestamo.FechaDevolucion);
+    
+    // Convertir string a LongInt usando Val
+    Val(numeroPaginasStr, tempNumeroPaginas);
+    Str(tempNumeroPaginas, Prestamo.NumeroPaginas);
+    
+    writeln('Cedula: ', Prestamo.Cedula);
+    writeln('Titulo: ', Prestamo.Titulo);
+    writeln('Autor: ', Libro.autor);
+
+    writeln('Numero de paginas: ', Prestamo.NumeroPaginas);
+   
+    writeln('-----------------------------');
+  end;
+  
+  close(txt);
+end;
